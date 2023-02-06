@@ -106,7 +106,7 @@ def dep_main(request):
     
     context = browse_announcements()
     context_f = faculty()
-    user_designation = ""
+    user_designation = "" 
     
     if fac_view:
         user_designation = "faculty"
