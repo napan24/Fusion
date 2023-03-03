@@ -28,7 +28,6 @@ def browse_announcements():
     """
     This function is used to browse Announcements Department-Wise
     made by different faculties and admin.
-
     @variables:
         cse_ann - Stores CSE Department Announcements
         ece_ann - Stores ECE Department Announcements
@@ -36,13 +35,11 @@ def browse_announcements():
         sm_ann - Stores SM Department Announcements
         all_ann - Stores Announcements intended for all Departments
         context - Dictionary for storing all above data
-
     """
     cse_ann = Announcements.objects.filter(department="CSE")
     ece_ann = Announcements.objects.filter(department="ECE")
     me_ann = Announcements.objects.filter(department="ME")
     sm_ann = Announcements.objects.filter(department="SM")
-    ds_ann = Announcements.objects.filter(department="DS")
     all_ann = Announcements.objects.filter(department="ALL")
 
     context = {
@@ -50,7 +47,6 @@ def browse_announcements():
         "ece" : ece_ann,
         "me" : me_ann,
         "sm" : sm_ann,
-        "ds":ds_ann,
         "all" : all_ann
     }
 
@@ -59,10 +55,8 @@ def browse_announcements():
 def get_make_request(user_id):
     """
     This function is used to get requests for maker
-
     @variables:
         req - Contains request queryset
-
     """
     req = SpecialRequest.objects.filter(request_maker=user_id)
     return req
@@ -70,10 +64,8 @@ def get_make_request(user_id):
 def get_to_request(username):
     """
     This function is used to get requests for the receiver
-
     @variables:
         req - Contains request queryset
-
     """
     req = SpecialRequest.objects.filter(request_receiver=username)
     return req
@@ -83,16 +75,13 @@ def dep_main(request):
     """
     This function is used to differentiate between Different users
     and redirect them to different urls.
-
     @param:
         request - contains metadata about the requested page
-
     @variables:
         fac_view - Check if user is Faculty
         student - Check if user is student
         context - Stores data returned by browse_announcement()
         context_f - Stores data returned by faculty()
-
     """
     user = request.user
     usrnm = get_object_or_404(User, username=request.user.username)
@@ -108,7 +97,7 @@ def dep_main(request):
     
     context = browse_announcements()
     context_f = faculty()
-    user_designation = "" 
+    user_designation = ""
     
     if fac_view:
         user_designation = "faculty"
@@ -122,15 +111,16 @@ def dep_main(request):
         request_to = request.POST.get('request_to', '')
         request_details = request.POST.get('request_details', '')
         request_date = date.today()
-
-        obj_sprequest, created_object = SpecialRequest.objects.get_or_create(request_maker=user_info,
-                                                    request_date=request_date,
-                                                    brief=request_type,
-                                                    request_details=request_details,
-                                                    status="Pending",
-                                                    remarks="--",
-                                                    request_receiver=request_to
-                                                    )
+        
+        if request_type and request_to and request_details:
+            obj_sprequest, created_object = SpecialRequest.objects.get_or_create(request_maker=user_info,
+                                                        request_date=request_date,
+                                                        brief=request_type,
+                                                        request_details=request_details,
+                                                        status="Pending",
+                                                        remarks="--",
+                                                        request_receiver=request_to
+                                                        )
     
     if user_designation == "student":
         return render(request,"department/index.html", {"announcements":context,
@@ -147,15 +137,12 @@ def faculty_view(request):
     """
     This function is contains data for Requests and Announcement Related methods.
     Data is added to Announcement Table using this function.
-
     @param:
         request - contains metadata about the requested page
-
     @variables:
         usrnm, user_info, ann_maker_id - Stores data needed for maker
         batch, programme, message, upload_announcement,
         department, ann_date, user_info - Gets and store data from FORM used for Announcements.
-
     """
     usrnm = get_object_or_404(User, username=request.user.username)
     user_info = ExtraInfo.objects.all().select_related('user','department').filter(user=usrnm).first()
@@ -192,15 +179,12 @@ def staff_view(request):
     """
     This function is contains data for Requests and Announcement Related methods.
     Data is added to Announcement Table using this function.
-
     @param:
         request - contains metadata about the requested page
-
     @variables:
         usrnm, user_info, ann_maker_id - Stores data needed for maker
         batch, programme, message, upload_announcement,
         department, ann_date, user_info - Gets and store data from FORM used for Announcements for Students.
-
     """
     usrnm = get_object_or_404(User, username=request.user.username)
     user_info = ExtraInfo.objects.all().select_related('user','department').filter(user=usrnm).first()
@@ -237,15 +221,12 @@ def staff_view(request):
 def all_students(request,bid):
     """
     This function is used to Return data of Faculties Department-Wise.
-
     @param:
         request - contains metadata about the requested page
         bid - stores key for different batches
-
     @variables:
         student_list1 - Stores student data department, batch and programme-wise
         student_list - Stores data pagewise
-
     """
     if int(bid)==1:
         student_list1=Student.objects.order_by('id').filter(programme='B.Tech',
@@ -522,74 +503,6 @@ def all_students(request,bid):
         page_number=request.GET.get('page')
         student_list=paginator.get_page(page_number)
         id_dict={'student_list':student_list,}
-    elif int(bid)==5:
-        student_list1=Student.objects.order_by('id').filter(programme='B.Des.',
-                                                            batch=2021,
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id') 
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
-        return render(request, 'department/AllStudents.html',context=id_dict)
-    elif int(bid)==51:
-        student_list1=Student.objects.order_by('id').filter(programme='B.Des.',
-                                                            batch=2020,
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id') 
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
-        return render(request, 'department/AllStudents.html',context=id_dict)
-    elif int(bid)==511:
-        student_list1=Student.objects.order_by('id').filter(programme='B.Des.',
-                                                            batch=2019,
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id') 
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
-        return render(request, 'department/AllStudents.html',context=id_dict)
-    elif int(bid)==5111:
-        student_list1=Student.objects.order_by('id').filter(programme='B.Des.',
-                                                            batch=2018,
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id')
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
-        return render(request, 'department/AllStudents.html',context=id_dict)
-    elif int(bid)==51111:
-        student_list1=Student.objects.order_by('id').filter(programme='M.Des.',
-                                                            batch=2021,
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id')
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
-        return render(request, 'department/AllStudents.html',context=id_dict)
-    elif int(bid)==511111:
-        student_list1=Student.objects.order_by('id').filter(programme='M.Des.',
-                                                            batch=2020,
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id')
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
-        return render(request, 'department/AllStudents.html',context=id_dict)
-    elif int(bid)==5111111:
-        student_list1=Student.objects.order_by('id').filter(programme='PhD',
-                                                            id__user_type='student',
-                                                            id__department__name='design').select_related('id')
-        paginator=Paginator(student_list1,25,orphans=5)
-        page_number=request.GET.get('page')
-        student_list=paginator.get_page(page_number)
-        id_dict={'student_list':student_list,}
         return render(request, 'department/AllStudents.html',context=id_dict)
 
     
@@ -597,20 +510,17 @@ def all_students(request,bid):
 def faculty():
     """
     This function is used to Return data of Faculties Department-Wise.
-
     @variables:
         cse_f - Stores data of faculties from CSE Department
         ece_f - Stores data of faculties from ECE Department
         me_f - Stores data of faculties from ME Department
         sm_f - Stores data of faculties from ME Department
         context_f - Stores all above variables in Dictionary
-
     """
     cse_f=ExtraInfo.objects.filter(department__name='CSE',user_type='faculty')
     ece_f=ExtraInfo.objects.filter(department__name='ECE',user_type='faculty')
     me_f=ExtraInfo.objects.filter(department__name='ME',user_type='faculty')
     sm_f=ExtraInfo.objects.filter(department__name='SM',user_type='faculty')
-    ds_f=ExtraInfo.objects.filter(department__name='DS',user_type='faculty')
     staff=ExtraInfo.objects.filter(user_type='staff')
 
     context_f = {
@@ -618,7 +528,6 @@ def faculty():
         "ece_f" : ece_f,
         "me_f" : me_f,
         "sm_f" : sm_f,
-        "ds_f":ds_f,
         "staffNcse" : list(staff)+list(cse_f),
         "staffNece" : list(staff)+list(ece_f),
         "staffNme" : list(staff)+list(me_f),
@@ -631,11 +540,9 @@ def faculty():
 def approved(request):
     """
     This function is used to approve requests.
-
     @variables:
         request_id - Contains ID of the request to be updated
         remark - Contains Remarks added by the user while Approving the status
-
     """
     if request.method == 'POST':
         request_id = request.POST.get('id')
@@ -647,11 +554,9 @@ def approved(request):
 def deny(request):
     """
     This function is used to deny requests.
-
     @variables:
         request_id - Contains ID of the request to be updated
         remark - Contains Remarks added by the user while Denying the status
-
     """
     if request.method == 'POST':
         request_id = request.POST.get('id')
