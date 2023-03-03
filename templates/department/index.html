@@ -23,6 +23,9 @@
         <div class="three wide column">
 
             {% comment %}The user image card starts here!{% endcomment %}
+            {% block usercard %}
+                {% include 'globals/usercard.html' %}
+            {% endblock %}
             {% comment %}The user image card ends here!{% endcomment %}
             
             

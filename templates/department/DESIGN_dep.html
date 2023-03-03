@@ -35,7 +35,12 @@
         <a class="item" data-tab="Track records">
             Track records
         </a>
-
+        <a class="item" data-tab="Alumni">
+            Alumni
+        </a>
+        <a class="item" data-tab="Track records">
+            Track records
+        </a>
     </div>
     <div class="ui active tab" data-tab="about-us">
         <div class="ui vertical segment">
@@ -196,7 +201,7 @@
 
                                 </thead>
 
-                                {% for stu in announcements.design %}
+                                {% for stu in announcements.ds %}
                                     <tr>
                                         <td>{{ stu.ann_date.date }}</td>
                                         <td>{{ stu.maker_id.user }}</td>
@@ -245,9 +250,9 @@
                             <div class="title">
                                 <i class="dropdown icon"></i>
                                 PhD Students
-                            </div>
+                            </div> 
                             <div class="content">
-                                <a class="item" href="./All_Students/{{1111111}}">
+                                <a class="item" href="./All_Students/{{5111111}}">
                                     <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;">
                                         PhD {{ user.extrainfo.department.name }} Students
@@ -263,13 +268,13 @@
                                 Mtech Students
                             </div>
                             <div class="content">
-                                <a class="item" href="./All_Students/{{11111}}">
+                                <a class="item" href="./All_Students/{{51111}}">
                                     <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;" >
                                         First Year {{ user.extrainfo.department.name }}
                                     </button>
                                 </a>
-                                <a class="item" href="./All_Students/{{111111}}">
+                                <a class="item" href="./All_Students/{{511111}}">
                                     <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;">
                                         Second Year {{ user.extrainfo.department.name }}
@@ -288,26 +293,26 @@
                             </div>
                             <div class="content">
                                 {% comment %} <a class="active item" href="/dep/All_Students/"> {% endcomment %}
-                                <a class="active item" href="./All_Students/{{1}}">
+                                <a class="active item" href="./All_Students/{{5}}">
                                 <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;">
                                         First Year {{ user.extrainfo.department.name }}
                                     </button>
                                 </a>
                                 {% comment %} <a class="active item" href="/dep/BtechSecondYear_Students/"> {% endcomment %}
-                                <a class="active item" href="./All_Students/{{11}}">
+                                <a class="active item" href="./All_Students/{{51}}">
                                     <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;">
                                         Second Year {{ user.extrainfo.department.name }}
                                     </button>
                                 </a>
-                                <a class="active item" href="./All_Students/{{111}}">
+                                <a class="active item" href="./All_Students/{{511}}">
                                     <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;">
                                         Third Year {{ user.extrainfo.department.name }}
                                     </button>
                                 </a>
-                                <a class="active item" href="./All_Students/{{1111}}">
+                                <a class="active item" href="./All_Students/{{5111}}">
                                     <!--   <button style="border: none; float: left; display: block;" class="ui inverted right floated small red button" onclick="requestModal()"> -->
                                     <button style="border: solid; float: left; display: block;">
                                         Final Year {{ user.extrainfo.department.name }}

@@ -25,6 +25,9 @@
         <a class="item" data-tab="sm">
             SM
         </a>
+        <a class="item" data-tab="ds">
+            DS
+        </a>
 
     </div>
 
@@ -229,6 +232,50 @@
                                 </thead>
 
                                 {% for stu in announcements.sm %}
+                                    <tr>
+                                        <td>{{ stu.ann_date.date }}</td>
+                                        <td>{{ stu.maker_id.user }}</td>
+                                        <td>{{ stu.programme }}</td>
+                                        <td>{{ stu.batch }}</td>
+                                        <td>{{ stu.message }}</td>
+                                        {% if stu.upload_announcement %}
+                                            <td><a target="_blank" href="/media/{{ stu.upload_announcement }}"><i class="large attach black icon"></i></a></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+                            {% comment %} {% endif %} {% endcomment %}
+                            <br><div class="ui divider"></div><br>
+                        </div>
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui tab" data-tab="ds">
+        <div class="ui vertical segment">
+            <div class="content">
+                <div class="description">
+                    <span>
+
+                        <div class="ui vertical segment" data-tab="Year-1">
+
+                            {% comment %} {% if ann_list %} {% endcomment %}
+                            <table class="ui very basic collapsing celled sortable table" style="padding-left: 2.5%; padding-right: 2.5%;padding-top: 1%; padding-bottom: 1.5%; margin: auto;">
+                                <thead>
+                                    <th>Announcement Date</th>
+                                    <th>Announcement By</th>
+                                    <th>Programme</th>
+                                    <th>Batch &nbsp</th>
+                                    <th>Message</th>
+                                    <th>File</th>
+
+                                </thead>
+
+                                {% for stu in announcements.ds %}
                                     <tr>
                                         <td>{{ stu.ann_date.date }}</td>
                                         <td>{{ stu.maker_id.user }}</td>
